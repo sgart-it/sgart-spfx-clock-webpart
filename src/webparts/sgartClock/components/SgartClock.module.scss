@@ -1,0 +1,68 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+/*
+https://docs.microsoft.com/en-us/sharepoint/dev/spfx/use-theme-colors-in-your-customizations
+
+--bodyText
+--link
+--linkHovered
+
+.\sgart-spfx-configurable-view-webpart\node_modules\office-ui-fabric-react\dist\sass\_semanticSlots.scss
+*/
+/*
+https://docs.microsoft.com/en-us/sharepoint/dev/declarative-customization/site-theming/sharepoint-site-theming-json-schema
+
+Orange theme
+{ 
+    themeDarker: '#6f2d09', 
+    themeDark: '#8d390b', 
+    themeDarkAlt: '#b5490f', 
+    themePrimary: '#ca5010',   rgb(202, 80, 16) 
+    themeSecondary: '#e55c12', 
+    themeTertiary: '#f6b28d', 
+    themeLight: '#fbdac9', 
+    themeLighter: '#fdede4', 
+    themeLighterAlt: '#fef6f1', 
+    black: '#000000', 
+    neutralDark: '#212121', 
+    neutralPrimary: '#333', 
+    neutralPrimaryAlt: '#3c3c3c', 
+    neutralSecondary: '#666666', 
+    neutralTertiary: '#a6a6a6', 
+    neutralTertiaryAlt: '#c8c8c8', 
+    neutralLight: '#eaeaea', 
+    neutralLighter: '#f4f4f4', 
+    neutralLighterAlt: '#f8f8f8', 
+    white: '#fff', 
+    neutralQuaternaryAlt: '#dadada', 
+    neutralQuaternary: '#d0d0d0', 
+    neutralSecondaryAlt: '#767676', 
+    primaryBackground: '#fff', 
+    primaryText: '#333',
+    accent: '#986f0b'
+}
+*/
+
+.sgartClock {
+  overflow: hidden;
+  padding: 1em;
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText);
+
+  &.teams {
+    font-family: $ms-font-family-fallbacks;
+  }
+}
+
+.title {
+  @include ms-fontSize-xl;
+  @include ms-fontWeight-semibold;
+  text-align: left;
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText);
+  margin: 0 0 10px 0;
+}
+
+.svgText {
+  @include ms-fontSize-xl;
+  font-weight: bold;
+}

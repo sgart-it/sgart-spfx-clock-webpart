@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "16.20.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.9.1"
+    },
+    "version": "1.17.4",
+    "libraryName": "sgart-spfx-clock",
+    "libraryId": "86b815d8-5850-4312-a506-8e14a69cedc1",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "sgart-spfx-clock",
+    "solutionShortDescription": "sgart-spfx-clock description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
