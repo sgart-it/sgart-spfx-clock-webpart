@@ -15,8 +15,6 @@ import SgartClock from './components/SgartClock';
 import { ISgartClockProps } from './components/ISgartClockProps';
 import { ISgartClockWebPartProps } from './ISgartClockWebPartProps';
 
-
-
 export default class SgartClockWebPart extends BaseClientSideWebPart<ISgartClockWebPartProps> {
 
   private _isDarkTheme: boolean = false;
@@ -26,7 +24,6 @@ export default class SgartClockWebPart extends BaseClientSideWebPart<ISgartClock
     const element: React.ReactElement<ISgartClockProps> = React.createElement(
       SgartClock,
       {
-        componentId: this.componentId,
         title: this.properties.webpartTitle,
         size: this.properties.size,
 

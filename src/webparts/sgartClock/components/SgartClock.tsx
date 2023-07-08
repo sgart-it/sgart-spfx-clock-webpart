@@ -4,12 +4,13 @@ import { ISgartClockProps } from './ISgartClockProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { isNullOrWhiteSpace } from '../Helper';
 
-const PrefixHours = "sgart-clock-hours-";
-const PrefixMinutes = "sgart-clock-minutes-";
-const PrefixSeconds = "sgart-clock-seconds-";
-const PrefixText = "sgart-clock-text-";
 
 export default class SgartClock extends React.Component<ISgartClockProps, {}> {
+
+  private hourRef = React.createRef<SVGLineElement>();
+  private minuteRef = React.createRef<SVGLineElement>();
+  private secondRef = React.createRef<SVGLineElement>();
+  private digitalClockRef = React.createRef<SVGTextElement>();
 
   componentDidMount(): void {
     setInterval(this.updateClock, 250);
@@ -19,7 +20,6 @@ export default class SgartClock extends React.Component<ISgartClockProps, {}> {
 
   public render(): React.ReactElement<ISgartClockProps> {
     const {
-      componentId,
       title,
       size,
       showHandSeconds,
@@ -76,16 +76,16 @@ export default class SgartClock extends React.Component<ISgartClockProps, {}> {
           </g>
           <g>
             {/* lancette ore, minuti e secondi con relativo id per animazione in JavaScript */}
-            <line x1="256" y1="256" x2="256" y2="430" stroke={handHoursColor} stroke-width="15" id={PrefixHours + componentId} />
-            <line x1="256" y1="256" x2="256" y2="70" stroke={handMinutesColor} stroke-width="10" id={PrefixMinutes + componentId} />
-            {showHandSeconds && <line x1="256" y1="256" x2="430" y2="256" stroke={handSecondsColor} stroke-width="5" id={PrefixSeconds + componentId} />}
+            <line x1="256" y1="256" x2="256" y2="430" stroke={handHoursColor} stroke-width="15" ref={this.hourRef} />
+            <line x1="256" y1="256" x2="256" y2="70" stroke={handMinutesColor} stroke-width="10" ref={this.minuteRef} />
+            {showHandSeconds && <line x1="256" y1="256" x2="430" y2="256" stroke={handSecondsColor} stroke-width="5" ref={this.secondRef} />}
           </g>
           <g>
             {/* cerchio lancette */}
             <circle cx="256" cy="256" r="15" fill={handPointColor} />
             {/* testi */}
             {isClockText && <text x="256" y="155" text-lenght="300" text-anchor="middle" className={styles.svgText} fill={clockTextColor}>{clockText}</text>}
-            {showDigitalClock && <text x="256" y="357" text-lenght="300" text-anchor="middle" className={styles.svgText} fill={digitalClockColor} id={PrefixText + componentId}>00:00:00</text>}
+            {showDigitalClock && <text x="256" y="357" text-lenght="300" text-anchor="middle" className={styles.svgText} fill={digitalClockColor} ref={this.digitalClockRef}>00:00:00</text>}
           </g>
         </svg>
 
@@ -94,24 +94,23 @@ export default class SgartClock extends React.Component<ISgartClockProps, {}> {
     );
   }
 
-
-  private setCoords = (centerX: number, centerY: number, elementId: string, num60: number, radius: number): void => {
+  private setCoordsRefs = (centerX: number, centerY: number, element: React.RefObject<SVGLineElement>, num60: number, radius: number): void => {
     const rad = (Math.PI / 30) * (num60 + 45);
 
     const x = centerX + Math.cos(rad) * radius;
     const y = centerY + Math.sin(rad) * radius;
     //console.log(x, y);
 
-    const elm = document.getElementById(elementId);
-    if (elm) {
+    if (element?.current) {
       // aggiorno le coordinate
-      elm.setAttribute("x2", x.toString());
-      elm.setAttribute("y2", y.toString());
+      element.current.setAttribute("x2", x.toString());
+      element.current.setAttribute("y2", y.toString());
     }
   };
 
+
   private updateClock = (): void => {
-    const { componentId, showHandSeconds, showDigitalClock, showDigitalClockSeconds } = this.props;
+    const { showHandSeconds, showDigitalClock, showDigitalClockSeconds } = this.props;
 
     const width = 512;
     const height = 512;
@@ -123,26 +122,25 @@ export default class SgartClock extends React.Component<ISgartClockProps, {}> {
     const radiusSecond = 200;
     const seconds = dt.getSeconds();
     if (showHandSeconds) {
-      this.setCoords(centerX, centerY, PrefixSeconds + componentId, seconds, radiusSecond);
+      this.setCoordsRefs(centerX, centerY, this.secondRef, seconds, radiusSecond);
     }
 
     // minutes
     const radiusMinutes = 186;
     const minutes = dt.getMinutes();
-    this.setCoords(centerX, centerY, PrefixMinutes + componentId, minutes, radiusMinutes);
+    this.setCoordsRefs(centerX, centerY, this.minuteRef, minutes, radiusMinutes);
 
     // hours
     const radiusHours = 150;
     const hours = dt.getHours();
     const hoursRad = (60 / 12) * (hours % 12) + (minutes * 5 / 60);
-    this.setCoords(centerX, centerY, PrefixHours + componentId, hoursRad, radiusHours);
+    this.setCoordsRefs(centerX, centerY, this.hourRef, hoursRad, radiusHours);
 
     // text
 
     if (showDigitalClock) {
-      const elmClockText = document.getElementById(PrefixText + componentId);
-      if (elmClockText) {
-        elmClockText.innerHTML = (hours < 10 ? "0" : "") + hours
+      if (this.digitalClockRef.current) {
+        this.digitalClockRef.current.innerHTML = (hours < 10 ? "0" : "") + hours
           + ":" + (minutes < 10 ? "0" : "") + minutes
           + (showDigitalClockSeconds ? ":" + (seconds < 10 ? "0" : "") + seconds : "");
       }

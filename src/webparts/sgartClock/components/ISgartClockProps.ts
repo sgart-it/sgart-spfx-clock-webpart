@@ -1,5 +1,4 @@
 export interface ISgartClockProps {
-  componentId: string;
   title: string;
   size: number;
   
