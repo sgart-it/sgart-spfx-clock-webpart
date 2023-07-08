@@ -2,6 +2,11 @@ define([], function() {
   return {
     "PropertyHeaderDescription": "Flexible view web part (Sgart.it)",
     "PresentationGroupName": "Presentation",
+    "NotchesGroupName":"Notches",
+    "HandsGroupName": "Hands",
+    "TextGroupName": "Text / Sgart.it",
+    "DigitalClockGroupName": "Digital clock",
+    "AboutGroupName" : "About",
 
     "WebPartTitleLabel": "Web part title",
     

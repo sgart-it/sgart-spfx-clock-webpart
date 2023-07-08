@@ -3,6 +3,8 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
+  PropertyPaneLink,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
@@ -13,7 +15,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'SgartClockWebPartStrings';
 import SgartClock from './components/SgartClock';
 import { ISgartClockProps } from './components/ISgartClockProps';
-import { ISgartClockWebPartProps } from './ISgartClockWebPartProps';
+import { ISgartClockWebPartProps, Notches, Reorder } from './ISgartClockWebPartProps';
 
 export default class SgartClockWebPart extends BaseClientSideWebPart<ISgartClockWebPartProps> {
 
@@ -31,17 +33,21 @@ export default class SgartClockWebPart extends BaseClientSideWebPart<ISgartClock
 
         backgroundColor: this.properties.backgroundColor,
         borderColor: this.properties.borderColor,
-        notchesColor: this.properties.notchesColor,
-        fourthColor: this.properties.fourthColor,
+
+        showNotches: this.properties.showNotches,
+        notches1Color: this.properties.notches1Color,
+        notches5Color: this.properties.notches5Color,
+        notches15Color: this.properties.notches15Color,
         handHoursColor: this.properties.handHoursColor,
         handMinutesColor: this.properties.handMinutesColor,
         handSecondsColor: this.properties.handSecondsColor,
         handPointColor: this.properties.handPointColor,
-        
+
+        clockTextReorder: this.properties.clockTextReorder,
         clockText: this.properties.clockText,
         clockTextColor: this.properties.clockTextColor,
 
-        showDigitalClock: this.properties.showDigitalClock,
+        digitalClockReorder: this.properties.digitalClockReorder,
         showDigitalClockSeconds: this.properties.showDigitalClockSeconds,
         digitalClockColor: this.properties.digitalClockColor,
 
@@ -117,6 +123,12 @@ export default class SgartClockWebPart extends BaseClientSideWebPart<ISgartClock
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const notchesOptions = Object.keys(Notches)
+      .map(item => { return { key: item, text: item } });
+
+    const reorderOptions = Object.keys(Reorder)
+      .map(item => { return { key: item, text: item } });
+
     return {
       pages: [
         {
@@ -135,9 +147,6 @@ export default class SgartClockWebPart extends BaseClientSideWebPart<ISgartClock
                   min: 0,
                   max: 1000
                 }),
-                PropertyPaneToggle('showHandSeconds',{
-                  label: 'show hand seconds'
-                }),
 
                 PropertyPaneTextField('backgroundColor', {
                   label: "Background color"
@@ -145,40 +154,83 @@ export default class SgartClockWebPart extends BaseClientSideWebPart<ISgartClock
                 PropertyPaneTextField('borderColor', {
                   label: "Border color"
                 }),
-                PropertyPaneTextField('notchesColor', {
-                  label: "Notches color"
+              ]
+            },
+            {
+              groupName: strings.NotchesGroupName,
+              groupFields: [
+                PropertyPaneDropdown('showNotches', {
+                  label: "Show",
+                  options: notchesOptions
                 }),
-                PropertyPaneTextField('fourthColor', {
-                  label: "Fourth color"
+
+                PropertyPaneTextField('notches1Color', {
+                  label: "1 minutes color"
                 }),
+                PropertyPaneTextField('notches5Color', {
+                  label: "5 minutes color"
+                }),
+                PropertyPaneTextField('notches15Color', {
+                  label: "15 minutes color"
+                })
+              ]
+            },
+            {
+              groupName: strings.HandsGroupName,
+              groupFields: [
                 PropertyPaneTextField('handHoursColor', {
-                  label: "Hand hours color"
+                  label: "Hours color"
                 }),
                 PropertyPaneTextField('handMinutesColor', {
-                  label: "Hand minutes color"
+                  label: "Minutes color"
                 }),
                 PropertyPaneTextField('handSecondsColor', {
-                  label: "Hand seconds color"
+                  label: "Seconds color"
                 }),
                 PropertyPaneTextField('handPointColor', {
                   label: "Hand point color"
                 }),
-
+                PropertyPaneToggle('showHandSeconds', {
+                  label: 'Show seconds'
+                })
+              ]
+            },
+            {
+              groupName: strings.TextGroupName,
+              groupFields: [
+                PropertyPaneDropdown('clockTextReorder', {
+                  label: "Reorder",
+                  options: reorderOptions
+                }),
                 PropertyPaneTextField('clockText', {
                   label: "Text"
                 }),
                 PropertyPaneTextField('clockTextColor', {
                   label: "Text color"
+                })]
+            },
+            {
+              groupName: strings.DigitalClockGroupName,
+              groupFields: [
+                PropertyPaneDropdown('digitalClockReorder', {
+                  label: "Reorder",
+                  options: reorderOptions
                 }),
-
-                PropertyPaneToggle('showDigitalClock',{
-                  label: 'Show digital clock'
-                }),
-                PropertyPaneToggle('showDigitalClockSeconds',{
-                  label: 'Show digital clock seconds'
+                PropertyPaneToggle('showDigitalClockSeconds', {
+                  label: 'Show seconds'
                 }),
                 PropertyPaneTextField('digitalClockColor', {
-                  label: "Digital clock color"
+                  label: "Color"
+                })
+              ]
+            },
+            {
+              groupName: strings.AboutGroupName,
+              groupFields: [
+                PropertyPaneLink('linkField', {
+                  text: "Sgart.it",
+                  href: "https://www.sgart.it/IT/informatica/orologio-svg-javascript/post",
+                  target: "_blank"
                 })
               ]
             }

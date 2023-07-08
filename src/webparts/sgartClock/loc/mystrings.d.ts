@@ -1,6 +1,11 @@
 declare interface ISgartClockWebPartStrings {
   PropertyHeaderDescription: string;
   PresentationGroupName: string;
+  NotchesGroupName: string;
+  HandsGroupName: string;
+  TextGroupName: string;
+  DigitalClockGroupName: string;
+  AboutGroupName: string;
   
   WebPartTitleLabel: string;
 

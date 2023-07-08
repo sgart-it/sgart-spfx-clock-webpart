@@ -1,3 +1,5 @@
+import { Notches, Reorder } from "../ISgartClockWebPartProps";
+
 export interface ISgartClockProps {
   title: string;
   size: number;
@@ -6,17 +8,22 @@ export interface ISgartClockProps {
     
   backgroundColor: string;
   borderColor: string;
-  notchesColor: string;
-  fourthColor: string;
+
+  showNotches: Notches,
+  notches1Color: string;
+  notches5Color: string;
+  notches15Color: string;
+
   handHoursColor: string;
   handMinutesColor: string;
   handSecondsColor: string;
   handPointColor: string;
 
+  clockTextReorder: Reorder;
   clockText:string;
   clockTextColor:string;
 
-  showDigitalClock: boolean;
+  digitalClockReorder: Reorder;
   showDigitalClockSeconds: boolean;
   digitalClockColor: string;
 
